@@ -3,14 +3,97 @@
   <head>
     <title>Bookers2</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <script src="https://kit.fontawesome.com/20b6c07374.js" crossorigin="anonymous"></script>
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+         <% if user_signed_in? %>
+          <div class="col-2 navbar-brand">
+            <%= link_to "Bookers", root_path %>
+          </div>
+          <div class="col-10 collapse navbar-collapse">
+            
+           <ul class="navbar-nav justify-content-between">
+              <li class="nav-link text-light">
+                <%= link_to user_path(current_user.id), method: :get do%>
+                  <i class="fas fa-home"></i> Home
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to users_path, method: :get do%>
+                  <i class="fas fa-users"></i> Users
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to books_path, method: :get do%>
+                 <i class="fas fa-book-open"></i> Books
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to destroy_user_session_path, method: :delete do%>
+                  <i class="fas fa-sign-out-alt"></i> Log out
+                <% end %>
+              </li>
+            </ul>
+          </div>
+        <% else %>
+          <div class="col-2 navbar-brand">
+            <%= link_to "Bookers", root_path %>
+          </div>
+          <div class="col-10 collapse navbar-collapse">
+            
+           <ul class="navbar-nav justify-content-between">
+              <li class="nav-link text-light">
+                <%= link_to root_path, method: :get do%>
+                  <i class="fas fa-home"></i> Home
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to about_path, method: :get do%>
+                  <i class="fas fa-link"></i> About
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to new_user_registration_path, method: :get do%>
+                  <i class="fas fa-user-plus"></i> Sign up
+                <% end %>
+              </li>
+              <li class="nav-link text-light">
+                <%= link_to new_user_session_path, method: :get do%>
+                  <i class="fas fa-sign-in-alt"></i> Log in
+                <% end %>
+              </li>
+              
+            </ul>
+          </div>
+          
 
-  <body>
+        <% end %>           
+    </div>
+  </nav>
+
+</header>
+
+<body>
+
+
     <%= yield %>
-  </body>
+</body>
+    <footer>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="mx-auto">
+             <p>CopyRight Infratop.inc</p>
+          </div>
+        </div>
+      </div>
+    </footer>
 </html>
