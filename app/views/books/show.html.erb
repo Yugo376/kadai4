@@ -3,6 +3,17 @@
   <%= flash[:notice] %>
 </div>
 
+<div id=id="error_explanation">
+  <% if @book_comment.errors.any? %>
+    <%= @book_comment.errors.count %> errors prohibited this book from being saved:
+    <ul>
+      <% @book_comment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
 
 <div class="container">
   <div class="row">
@@ -19,6 +30,8 @@
             <th>Username</th>
             <th>Title</th>
             <th>Openion</th>
+            <th>favorite</th>
+            <th>Comments</th>
             <th></th>
       
           </tr>
@@ -33,6 +46,24 @@
               </td>
               <td><%= @book.title %></td>
               <td><%= @book.body %></td>
+              <td>
+                <% if @book.favorited_by?(current_user) %>
+                  <p>
+                    <%= link_to book_favorites_path(@book), method: :delete do %>
+                      <div class=heart-red>
+                        ❤<%= @book.favorites.count %>
+                      </div>
+                    <% end %>
+                  </p>
+                <% else %>
+                  <p>
+                    <%= link_to book_favorites_path(@book), method: :post do %>
+                      <i class="fas fa-heart"></i><%= @book.favorites.count %>
+                    <% end %>
+                  </p>
+                <% end %>
+              </td>
+              <td><p>コメント数：<%= @book.book_comments.count %></p></td>
               
               <td>
                 <% if @book.user == current_user %>
@@ -43,6 +74,52 @@
             </tr>
         </tbody>
       </table>
+      
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>User Name</th>
+            <th>comment</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @book.book_comments.each do |book_comment| %>
+            <tr>
+              <td>
+                  <%= link_to user_path(@book.user.id) do %>
+                    <%= image_tag @book.user.get_profile_image(100,100) %>
+                  <% end %>
+                  <%= link_to @book.user.name, user_path(@book.user.id) %>            
+              </td>
+              <td>
+                <%= book_comment.user.name %>
+              </td>
+              <td>
+                <%= book_comment.comment %>
+              </td>
+              <td>
+                <% if book_comment.user == current_user %>
+                  <button type="button" class="btn btn-danger">
+                    <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), method: :delete %>
+                  </button>
+                <% end %>             
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      
+      
+      
+      <div class="book_comment">
+        <%= form_with model: [@book,@book_comment]  do |f| %>
+            <%= f.text_area :comment %>
+            <%= f.submit "送信" %>
+        <% end %>
+      </div>
+      
     </div>
   </div>
 </div>
